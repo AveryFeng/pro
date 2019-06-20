@@ -1,0 +1,75 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<body onload="getCar()">
+	<select name="" id="sel" onchange="getList()">
+		<option checked value="lt8">lt8</option>
+		<option value="lt15">lt10</option>
+		<option value="lt30">lt30</option>
+		<option value="suv">suv</option>
+	</select>
+	<table border="1px" width="1200px" id="ta">
+			<tr>
+				<th>汽车图片</th>
+				<th>汽车价格</th>
+				<th>汽车名称</th>
+				<th>操作</th>
+			</tr>
+		</table>
+		<script>
+			function getCar(){
+				var arr=sel.value;
+				getList(arr)
+			}
+			function getList(){
+				//接收select 变量
+				var cate=sel.value
+				//1.创建异步对象
+				var xhr=new XMLHttpRequest();
+				//4.响应
+				xhr.onreadystatechange=function(){
+					if(xhr.readyState==4&&xhr.status==200){
+						var result=xhr.responseText;
+						var cateCar=JSON.parse(result)
+						var html="";
+						for(var i=0;i<cateCar.length;i++){
+							html+=`
+						<tr>
+							<td><img src='${cateCar[i].pic}'></td>
+							<td>${cateCar[i].price}</td>
+							<td>${cateCar[i].cname}</td>
+							<td><a href='cardetails.html?cid=${cateCar[i].cid}'>商品详情</a>
+							<a  href='javascript:delList(${cateCar[i].cid})'>删除</a></td>
+						</tr>
+						`
+						}
+						ta.innerHTML=html
+					}
+				}
+				//2.打开连接
+				xhr.open("get","http://127.0.0.1:8080/car/list?tid="+cate,true)
+				//3.发送响应
+				xhr.send();
+			}
+			function delList(cid){
+				//接收参数
+				//1
+				xhr=new XMLHttpRequest();
+				//4
+				xhr.onreadystatechange=function(){
+					if(xhr.readyState==4&&xhr.status==200){
+						var result=xhr.responseText;
+						alert(result)
+					}
+				}
+				//2
+				xhr.open("get","http://127.0.0.1:8080/car/del?cid="+cid,true)
+				//3
+				xhr.send()
+			}
+		</script>
+	</body>
+</html>

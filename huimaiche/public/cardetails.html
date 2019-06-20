@@ -1,0 +1,37 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<body onload="cardetail()">
+		<h2>商品详情</h2>
+		<ul id="car"></ul>
+		<script>
+			function cardetail(){
+				//接收url字符串
+				var urlParams=new URLSearchParams(location.search);
+				var in_cid=urlParams.get("cid")
+				//1
+				var xhr=new XMLHttpRequest;
+				//4
+				xhr.onreadystatechange=function(){
+					if(xhr.readyState==4&&xhr.status){
+						var result=xhr.responseText;
+						var det=JSON.parse(result)[0];
+						car.innerHTML=`
+							<li><img src='${det.pic}'></li>
+							<li>${det.cname}</li>
+							<li>${det.price}</li>
+							<li>${det.cid}</li>
+						`
+					}
+				}
+				//2
+				xhr.open("get","http://127.0.0.1:8080/car/details?cid="+in_cid)
+				//3
+				xhr.send();
+			}
+		</script>
+	</body>
+</html>

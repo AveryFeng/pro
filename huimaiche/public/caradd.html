@@ -1,0 +1,40 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<body>
+		<h2>添加内容</h2>
+		<span>汽车名称:</span><input type="text" id="car_name"><br>
+		<span>汽车价格:</span><input type="text" id="car_price"><br>
+		<span>汽车图片:</span><input type="text" id="car_pic"><br>
+		<span>汽车类别:</span><input type="text" id="car_category"><br>
+		<input type="button" value="添加" onclick="add()"> <a href="carlist.html">跳转</a>
+		<script>
+			function add(){
+				//接收变量
+				var cname=car_name.value
+				var cprice=car_price.value
+				var cpic=car_pic.value
+				var ccate=car_category.value
+				//1.创建异步变量
+				var xhr=new XMLHttpRequest();
+				//4.响应
+				xhr.onreadystatechange=function(){
+					if(xhr.readyState==4&&xhr.status==200){
+						var result=xhr.responseText;
+						var arr=JSON.parse(result);
+						alert(arr.msg)
+					}
+				}
+				//2.打开连接,创立请求
+				xhr.open("post","http://127.0.0.1:8080/car/add",true)
+				//3.发送请求
+				xhr.setRequestHeader("content-type","application/x-www-form-urlencoded")
+				var formdata=`cname=${cname}&price=${cprice}&pic=${cpic}&tid=${ccate}`
+				xhr.send(formdata)
+			}
+		</script>
+	</body>
+</html>
